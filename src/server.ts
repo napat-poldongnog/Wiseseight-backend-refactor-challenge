@@ -1,21 +1,14 @@
-import express, { Request, Response, Router } from "express";
-import dotenv from "dotenv";
-import userRoutes from "./routes/userRoutes";
-import productRoutes from "./routes/productRoutes";
-import orderRoutes from "./routes/orderRoutes";
+// * Express
+import express from 'express'
 
-dotenv.config();
-const app = express();
+// * Application config
+import App from './application/configuration/app'
+import appEnv from './application/configuration/properties/appEnv'
 
-app.use(express.json());
+const envVars = appEnv()
 
-app.use("/users", userRoutes);
-app.use("/products", productRoutes);
-app.use("/orders", orderRoutes);
+const app = new App(express()).init()
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({ message: "Hello World" });
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(envVars.port, () => {
+  console.log(`Server running on port ${envVars.port}`)
+})
