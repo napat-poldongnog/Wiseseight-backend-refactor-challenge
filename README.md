@@ -13,7 +13,8 @@ This challenge will give us insight into **how you structure, refactor, and adap
 
 ## 🔥 What You'll Be Doing:
 
-You will be working with a simplified e-commerce API that needs architectural improvement. While this is a simplified version, imagine this system scaling to:
+You will be working with a simplified e-commerce API that needs architectural improvement. While this is a simplified
+version, imagine this system scaling to:
 
 - 5000+ API routes
 - Multiple development teams (3+ teams) working independently:
@@ -90,15 +91,18 @@ Orders **handle the purchasing process**.
 2️⃣ User places an order → `POST /orders` (to simplify this, we allow users to order with one product at a time)  
 3️⃣ User receives an order summary → `POST /orders/:id`
 
-💡 Feel free to use AI, automation, or any tools that help you.
-We care about the final architecture and your decision-making, not how you get there.
+💡 Feel free to use AI, automation, or any tools that help you. We care about the final architecture and your
+decision-making, not how you get there.
 
 ## 🚀 Submission Guidelines
 
-1️⃣ Fork the repository [See fork instructions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)  
-2️⃣ Refactor the API  
+1️⃣ Fork the repository
+[See fork instructions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)  
+2️⃣
+Refactor the API  
 3️⃣ Commit and push your changes  
-4️⃣ Open a Pull Request (PR) to the main branch [See how to create a pull request from a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)  
+4️⃣ Open a Pull Request (PR) to the main branch
+[See how to create a pull request from a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
 
 ## 📌 Next Steps
 
@@ -108,7 +112,7 @@ Be prepared to discuss:
 
 🔹 Explain your reasoning behind architectural choices.  
 🔹 Answer follow-up questions about trade-offs and scalability.  
-🔹 Discuss how you would adapt the architecture for different scenarios.  
+🔹 Discuss how you would adapt the architecture for different scenarios.
 
 ## 🚀 Project Setup Instructions
 
