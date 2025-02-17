@@ -24,27 +24,27 @@ export declare namespace RestRouter {
 }
 
 class AppRestRouter {
-  readonly #expressInstance: ExpressInstance
-  readonly #restRouteFilePath: string = path.resolve('./src/adapters/inbound/http/restController')
+  private readonly expressInstance: ExpressInstance
+  private readonly restRouteFilePath: string = path.resolve('./src/adapters/inbound/http/restController')
 
   constructor(expressInstance: ExpressInstance) {
-    this.#expressInstance = expressInstance
+    this.expressInstance = expressInstance
   }
 
-  async #importAllRestRoutes(dir: string) {
+  private async importAllRestRoutes(dir: string) {
     const files = fs.readdirSync(dir, { withFileTypes: true })
 
     for (const file of files) {
       const fullPath = path.join(dir, file.name)
 
       if (file.isDirectory()) {
-        await this.#importAllRestRoutes(fullPath)
+        await this.importAllRestRoutes(fullPath)
       } else if (file.name === 'index.ts') {
         try {
           const fileUrl = pathToFileURL(fullPath).href
           const { prefix, router } = (await import(fileUrl)).default as RestRouter.RouteDefinition
 
-          this.#expressInstance.use(prefix, router)
+          this.expressInstance.use(prefix, router)
         } catch (error) {
           console.error(`Failed to import REST route ${fullPath}:`, error)
         }
@@ -53,7 +53,7 @@ class AppRestRouter {
   }
 
   async init() {
-    this.#importAllRestRoutes(this.#restRouteFilePath)
+    this.importAllRestRoutes(this.restRouteFilePath)
   }
 }
 

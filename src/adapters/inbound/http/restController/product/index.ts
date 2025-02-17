@@ -15,6 +15,10 @@ import type { InquiryAllProductRestResponseDTO } from './dtos/inquiryAllProductR
 // * RestRouter namespace
 import type { RestRouter } from '../../../../../application/configuration/router/restRouter'
 
+import appEnv from '../../../../../application/configuration/properties/appEnv'
+
+const env = appEnv()
+
 export class ProductRestController {
   private readonly router = express.Router()
 
@@ -39,7 +43,7 @@ export class ProductRestController {
 }
 
 const productRouteDefinition: RestRouter.RouteDefinition = {
-  prefix: '/products',
+  prefix: `/${env.apiVersion}/products`,
   /**
    * * We can create a factory function to initialize class instances,
    * * or for a more complex approach, we can use dependency injection (DI)

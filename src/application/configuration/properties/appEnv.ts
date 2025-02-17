@@ -7,6 +7,7 @@ const appEnv = () => {
   // * You can implement a custom environment file loader that depends on the environment mode
   return {
     port: process.env.PORT || 3000,
+    apiVersion: process.env.API_VERSION || 'v1',
   }
 }
 
