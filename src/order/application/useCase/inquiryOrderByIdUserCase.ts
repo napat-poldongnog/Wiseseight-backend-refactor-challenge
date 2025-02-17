@@ -5,7 +5,7 @@ import type { UseCase } from '../configuration/useCase'
 import type { InquiryOrderByIdPort } from '../ports/inbound/http/rest/order/inquiryOrderByIdPort'
 
 // * Adapter outbound API
-import { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
+import type { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
 
 // * Adapter outbound repository
 import type { OrderRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/orderRepositoryMongoDBImpl'
