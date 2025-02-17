@@ -18,44 +18,60 @@ export class CreateOrderUseCase implements UseCase<CreateOrderPort.Body, CreateO
   ) {}
 
   async execute(reqBody: CreateOrderPort.Body): Promise<CreateOrderPort.Result> {
-    const { userId, productId, quantity } = reqBody
+    try {
+      const { userId, productId, quantity } = reqBody
 
-    if (!userId || !productId || !quantity || quantity <= 0) {
+      if (!userId || !productId || !quantity || quantity <= 0) {
+        return {
+          data: null,
+          code: '0001', // Just mock
+          message: 'Invalid order details',
+        }
+      }
+
+      const product = this.productRepositoryImpl.findById(productId)
+      if (!product) {
+        return {
+          data: null,
+          code: '0002', // Just mock
+          message: 'Product not found',
+        }
+      }
+
+      if (product.stock < quantity) {
+        return {
+          data: null,
+          code: '0003', // Just mock
+          message: 'Insufficient stock',
+        }
+      }
+
+      const totalPrice = product.price * quantity
+      const newOrder = { id: uuidv4(), userId, productId, quantity, totalPrice }
+
+      this.orderRepositoryImpl.create(newOrder)
+      product.stock -= quantity
+      this.productRepositoryImpl.update(product)
+
+      return {
+        data: newOrder,
+        code: '0000', // Just mock
+        message: 'Order placed successfully',
+      }
+    } catch (e: unknown) {
+      let message = 'An error occurred'
+
+      if (typeof e === 'string') {
+        message = e
+      } else if (e instanceof Error) {
+        message = e.message
+      }
+
       return {
         data: null,
-        code: '0001', // Just mock
-        message: 'Invalid order details',
+        code: 'E500', // Just mock
+        message,
       }
-    }
-
-    const product = this.productRepositoryImpl.findById(productId)
-    if (!product) {
-      return {
-        data: null,
-        code: '0002', // Just mock
-        message: 'Product not found',
-      }
-    }
-
-    if (product.stock < quantity) {
-      return {
-        data: null,
-        code: '0003', // Just mock
-        message: 'Insufficient stock',
-      }
-    }
-
-    const totalPrice = product.price * quantity
-    const newOrder = { id: uuidv4(), userId, productId, quantity, totalPrice }
-
-    this.orderRepositoryImpl.create(newOrder)
-    product.stock -= quantity
-    this.productRepositoryImpl.update(product)
-
-    return {
-      data: newOrder,
-      code: '0000', // Just mock
-      message: 'Order placed successfully',
     }
   }
 }

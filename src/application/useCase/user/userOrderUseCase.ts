@@ -17,33 +17,49 @@ export class UserOrderUseCase implements UseCase<UserOrderPort.Params, UserOrder
   ) {}
 
   async execute(params: UserOrderPort.Params) {
-    const { id } = params
+    try {
+      const { id } = params
 
-    const user = this.userRespositoryMongoDBImpl.findById(id)
+      const user = this.userRespositoryMongoDBImpl.findById(id)
 
-    if (!user) {
+      if (!user) {
+        return {
+          code: '0001',
+          data: [],
+          message: 'User not found',
+        }
+      }
+
+      const userOrders = this.orderRepositoryMongoDBImpl.findAllByUserId(id)
+
+      const detailedOrders = userOrders.map((order) => {
+        const product = this.productRepositoryMongoDBImpl.findById(order.productId)
+        return {
+          ...order,
+          productName: product ? product.name : 'Unknown',
+          productPrice: product ? product.price : 0,
+        }
+      })
+
       return {
-        code: '0001',
+        code: '0000',
+        data: detailedOrders,
+        message: 'Inquired user orders successful',
+      }
+    } catch (e: unknown) {
+      let message = 'An error occurred'
+
+      if (typeof e === 'string') {
+        message = e
+      } else if (e instanceof Error) {
+        message = e.message
+      }
+
+      return {
         data: [],
-        message: 'User not found',
+        code: 'E500', // Just mock
+        message,
       }
-    }
-
-    const userOrders = this.orderRepositoryMongoDBImpl.findAllByUserId(id)
-
-    const detailedOrders = userOrders.map((order) => {
-      const product = this.productRepositoryMongoDBImpl.findById(order.productId)
-      return {
-        ...order,
-        productName: product ? product.name : 'Unknown',
-        productPrice: product ? product.price : 0,
-      }
-    })
-
-    return {
-      code: '0000',
-      data: detailedOrders,
-      message: 'Inquired user orders successful',
     }
   }
 

@@ -11,12 +11,28 @@ export class InquiryAllProductUseCase implements UseCase<InquiryAllProductPort.P
   constructor(private readonly productRepositoryImpl: ProductRepositoryMongoDBImpl) {}
 
   async execute(): Promise<InquiryAllProductPort.Result> {
-    const products = this.productRepositoryImpl.findAll()
+    try {
+      const products = this.productRepositoryImpl.findAll()
 
-    return {
-      code: '0000',
-      data: products,
-      message: 'Inquiried all products successful',
+      return {
+        code: '0000',
+        data: products,
+        message: 'Inquiried all products successful',
+      }
+    } catch (e: unknown) {
+      let message = 'An error occurred'
+
+      if (typeof e === 'string') {
+        message = e
+      } else if (e instanceof Error) {
+        message = e.message
+      }
+
+      return {
+        data: [],
+        code: 'E500', // Just mock
+        message,
+      }
     }
   }
 }
