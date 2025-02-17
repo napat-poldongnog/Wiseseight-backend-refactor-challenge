@@ -2,7 +2,7 @@
 import type { ProductDomainEntity } from '../../../../domain/entities/product/productDomainEntity'
 
 export interface ProductApiPort {
-   findById: (productId: string) => Promise<ProductDomainEntity | null>
+  findById: (productId: string) => Promise<ProductDomainEntity | null>
 
-   update: (product: ProductDomainEntity) => void
+  update: (product: ProductDomainEntity) => void
 }

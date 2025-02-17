@@ -11,7 +11,7 @@ import type { CreateOrderPort } from '../ports/inbound/http/rest/order/createOrd
 import type { OrderRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/orderRepositoryMongoDBImpl'
 
 // * Adapter outbound API
-import { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
+import type { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
 
 export class CreateOrderUseCase implements UseCase<CreateOrderPort.Body, CreateOrderPort.Result> {
   constructor(

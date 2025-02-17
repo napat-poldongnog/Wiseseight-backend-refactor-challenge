@@ -8,11 +8,11 @@ import type { UserOrderPort } from '../ports/inbound/http/rest/userOrderPort'
 import type { OrderDomainEntity } from '../domain/entities/order/orderDomainEntity'
 
 // * Adapter outbound APIs
-import { OrderApiImpl } from '../../adapters/outbound/gatewayAPI/orderApi/orderApiImpl'
-import { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
+import type { OrderApiImpl } from '../../adapters/outbound/gatewayAPI/orderApi/orderApiImpl'
+import type { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
 
 // * Adapter outbound repository
-import { UserRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/userRepositoryMongoDBImpl'
+import type { UserRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/userRepositoryMongoDBImpl'
 
 export class UserOrderUseCase implements UseCase<UserOrderPort.Params, UserOrderPort.Result> {
   constructor(
