@@ -12,17 +12,17 @@ import { UpdateProductUseCase } from '../../../../application/useCase/updateProd
 import { InquiryAllProductUseCase } from '../../../../application/useCase/inquiryAllProductUseCase'
 import { InquiryProductByIdUseCase } from '../../../../application/useCase/inquiryProductByIdUseCase'
 
-// * Outbound repositories
+// * Adapter outbound repositories
 import { ProductMongoDBRepository } from '../../../outbound/db/mongoDB/productMongoDBRepository'
 import { ProductRepositoryMongoDBImpl } from '../../../outbound/db/mongoDB/productRepositoryMongoDBImpl'
 
 // * Adapter inbound DTOs
 import type { BaseRestResponse } from './baseResponseDTO'
-import type { UpdateProductRequestDTO } from './dtos/request/updateProductRequestDTO'
-import type { InquiryProductByIdRequestDTO } from './dtos/request/inquiryProductByIdRequestDTO'
+import type { InquiryProductByIdRestRequestDTO } from './dtos/request/inquiryProductByIdRestRequestDTO'
+import type { InquiryProductByIdRestResponseDTO } from './dtos/response/inquiryProductByIdRestResponseDTO'
+import type { UpdateProductRestRequestDTO } from './dtos/request/updateProductRestRequestDTO'
 import type { UpdateProductRestResponseDTO } from './dtos/response/updateProductRestResponseDTO'
 import type { InquiryAllProductRestResponseDTO } from './dtos/response/inquiryAllProductRestResponseDTO'
-import type { InquiryProductByIdRestResponseDTO } from './dtos/response/inquiryProductByIdRestResponseDTO'
 
 const env = appEnv()
 
@@ -54,7 +54,7 @@ export class ProductRestController {
     this.router.get(
       '/:id',
       async (
-        req: Request<InquiryProductByIdRequestDTO>,
+        req: Request<InquiryProductByIdRestRequestDTO>,
         res: Response<BaseRestResponse<InquiryProductByIdRestResponseDTO>>,
       ) => {
         const { data, code, message } = await this.inquiryProductByIdUseCase.execute(req.params.productId)
@@ -70,7 +70,7 @@ export class ProductRestController {
     this.router.put(
       '/',
       async (
-        req: Request<object, object, UpdateProductRequestDTO>,
+        req: Request<object, object, UpdateProductRestRequestDTO>,
         res: Response<BaseRestResponse<UpdateProductRestResponseDTO>>,
       ) => {
         const { data, code, message } = await this.updateProductUseCase.execute(req.body)

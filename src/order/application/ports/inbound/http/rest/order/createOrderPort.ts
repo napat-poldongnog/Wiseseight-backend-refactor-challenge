@@ -1,6 +1,6 @@
 // * Request & Response DTOs
-import type { CreateOrderRequestDTO } from './dtos/createOrderRequestDTO'
-import type { CreateOrderResponseDTO } from './dtos/createOrderResponseDTO'
+import type { CreateOrderRequestDTO } from './dtos/request/createOrderRequestDTO'
+import type { CreateOrderResponseDTO } from './dtos/response/createOrderResponseDTO'
 
 export interface CreateOrderPort {
   execute: (data: CreateOrderPort.Body) => Promise<CreateOrderPort.Result>

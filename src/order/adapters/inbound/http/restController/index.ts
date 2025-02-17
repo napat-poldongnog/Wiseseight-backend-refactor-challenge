@@ -9,9 +9,7 @@ import appEnv from '../../../../application/configuration/properties/appEnv'
 
 // * Use cases
 import { CreateOrderUseCase } from '../../../../application/useCase/createOrderUseCase'
-
-// * Adapter inbound port interfaces
-import { type CreateOrderRequestDTO } from '../../../../application/ports/inbound/http/rest/order/dtos/createOrderRequestDTO'
+import { InquiryOrderByIdUserCase } from '../../../../application/useCase/inquiryOrderByIdUserCase'
 
 // * Adapter outbound repositories
 import { OrderMongoDBRepository } from '../../../outbound/db/mongoDB/orderMongoDBRepository'
@@ -22,22 +20,52 @@ import { ProductApiImpl } from '../../../outbound/gatewayAPI/productApi/productA
 
 // * Adapter inbound DTOs
 import type { BaseRestResponse } from './baseResponseDTO'
+import type { CreateOrderRestRequestDTO } from './dtos/request/createOrderRestRequestDTO'
 import type { CreateOrderRestResponseDTO } from './dtos/response/createOrderRestResponseDTO'
+import type { InquiryOrderByIdRequestDTO } from '../../../../application/ports/inbound/http/rest/order/dtos/request/inquiryOrderByIdRequestDTO'
+import type { InquiryOrderByIdRestResponeDTO } from './dtos/response/inquiryOrderByIdRestResponeDTO'
 
 const env = appEnv()
 
 export class OrderRestController {
   private readonly router = express.Router()
 
-  constructor(private readonly createOrderUseCase: CreateOrderUseCase) {
+  constructor(
+    private readonly createOrderUseCase: CreateOrderUseCase,
+    private readonly inquiryOrderByIdUseCase: InquiryOrderByIdUserCase,
+  ) {
     this.initRoute()
   }
 
   private initRoute() {
+    // * Inquiry order by id
+    this.router.get(
+      '/:id',
+      async (
+        req: Request<InquiryOrderByIdRequestDTO>,
+        res: Response<BaseRestResponse<InquiryOrderByIdRestResponeDTO>>,
+      ): Promise<any> => {
+        const { code, message, data } = await this.inquiryOrderByIdUseCase.execute(req.params)
+
+        if (code === '0000') {
+          res.status(201).json({ code, message, data })
+        } else if (code === '0001') {
+          return res.status(400).json({ code, message })
+        } else if (code === '0002') {
+          return res.status(404).json({ code, message })
+        } else if (code === '0003') {
+          return res.status(400).json({ code: '', message })
+        } else {
+          res.status(201).json({ code: '', message, data })
+        }
+      },
+    )
+
+    // * Place order
     this.router.post(
       '/',
       async (
-        req: Request<object, object, CreateOrderRequestDTO>,
+        req: Request<object, object, CreateOrderRestRequestDTO>,
         res: Response<BaseRestResponse<CreateOrderRestResponseDTO>>,
       ): Promise<any> => {
         const { code, message, data } = await this.createOrderUseCase.execute(req.body)
@@ -70,6 +98,7 @@ const orderRouteDefinition: RestRouter.RouteDefinition = {
    */
   router: new OrderRestController(
     new CreateOrderUseCase(new ProductApiImpl(), new OrderRepositoryMongoDBImpl(new OrderMongoDBRepository())),
+    new InquiryOrderByIdUserCase(new ProductApiImpl(), new OrderRepositoryMongoDBImpl(new OrderMongoDBRepository())),
   ).getRouter(),
 }
 

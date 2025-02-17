@@ -11,22 +11,20 @@ import appEnv from '../../../../application/configuration/properties/appEnv'
 import { RegisterUseCase } from '../../../../application/useCase/registerUseCase'
 import { UserOrderUseCase } from '../../../../application/useCase/userOrderUseCase'
 
-// * Inbound port interfaces
-import { type RegisterRequestDTO } from '../../../../application/ports/inbound/http/rest/dtos/registerRequestDTO'
-import { type UserOrderRequestDTO } from '../../../../application/ports/inbound/http/rest/dtos/userOrderRequestDTO'
-
-// * Outbound repositories
+// * Adapter outbound repositories
 import { UserMongoDBRepository } from '../../../outbound/db/mongoDB/userMongoDBRepository'
 import { UserRepositoryMongoDBImpl } from '../../../outbound/db/mongoDB/userRepositoryMongoDBImpl'
 
-// * Outbound APIs
+// * Adapter outbound APIs
 import { OrderApiImpl } from '../../../outbound/gatewayAPI/orderApi/orderApiImpl'
 import { ProductApiImpl } from '../../../outbound/gatewayAPI/productApi/productApiImpl'
 
 // * Adapter inbound DTOs
 import type { BaseRestResponse } from './baseResponseDTO'
+import type { RegisterRestRequestDTO } from './dtos/request/registerRestRequestDTO'
 import type { RegisterRestResponseDTO } from './dtos/response/registerRestResponseDTO'
-import type { UserOrderRestResponseDTO } from './dtos/response/userOrderRestResponseDTO'
+import type { InquiryUserOrderRestRequestDTO } from './dtos/request/inquiryUserOrderRestRequestDTO'
+import type { InquiryUserOrderRestResponseDTO } from './dtos/response/inquiryUserOrderRestResponseDTO'
 
 const env = appEnv()
 
@@ -41,10 +39,11 @@ export class UserRestController {
   }
 
   private initRoute() {
+    // * Register
     this.router.post(
       '/register',
       async (
-        req: Request<object, object, RegisterRequestDTO>,
+        req: Request<object, object, RegisterRestRequestDTO>,
         res: Response<BaseRestResponse<RegisterRestResponseDTO>>,
       ): Promise<any> => {
         const { code, data, message } = await this.registerUseCase.execute(req.body)
@@ -61,10 +60,14 @@ export class UserRestController {
       },
     )
 
+    // * Inquiry all user orders
     this.router.get(
       '/:id/orders',
-      async (req: Request, res: Response<BaseRestResponse<UserOrderRestResponseDTO[]>>): Promise<any> => {
-        const result = await this.userOrderUseCase.execute(req.params as unknown as UserOrderRequestDTO)
+      async (
+        req: Request<InquiryUserOrderRestRequestDTO>,
+        res: Response<BaseRestResponse<InquiryUserOrderRestResponseDTO[]>>,
+      ): Promise<any> => {
+        const result = await this.userOrderUseCase.execute(req.params)
 
         if (result.code === '0001') {
           return res.status(404).json(result)

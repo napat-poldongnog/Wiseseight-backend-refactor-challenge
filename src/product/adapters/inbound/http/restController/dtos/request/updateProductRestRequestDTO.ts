@@ -1,4 +1,4 @@
-export interface UpdateProductRequestDTO {
+export interface UpdateProductRestRequestDTO {
   id: string
   name: string
   price: number

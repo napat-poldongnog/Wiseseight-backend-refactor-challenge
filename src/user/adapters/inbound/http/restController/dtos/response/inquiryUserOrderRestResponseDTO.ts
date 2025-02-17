@@ -1,4 +1,4 @@
-export interface UserOrderRestResponseDTO {
+export interface InquiryUserOrderRestResponseDTO {
   id: string
   productName: string
   productPrice: number
