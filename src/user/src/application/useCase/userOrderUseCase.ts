@@ -7,25 +7,25 @@ import type { UserOrderPort } from '../ports/inbound/http/rest/userOrderPort'
 // * Domain entity interface
 import type { OrderDomainEntity } from '../domain/entities/order/orderDomainEntity'
 
-// * Adapter outbound APIs
-import type { OrderApiImpl } from '../../adapters/outbound/gatewayAPI/orderApi/orderApiImpl'
-import type { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
+// * Adapter outbound gateway api ports
+import type { OrderApiPort } from '../ports/outbound/gatewayAPI/order/OrderApiPort'
+import type { ProductApiPort } from '../ports/outbound/gatewayAPI/product/productApiPort'
 
-// * Adapter outbound repository
-import type { UserRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/userRepositoryMongoDBImpl'
+// * Adapter outbound repository port
+import type { UserRepositoryPort } from '../ports/outbound/repositories/userRepositoryPort'
 
 export class UserOrderUseCase implements UseCase<UserOrderPort.Params, UserOrderPort.Result> {
   constructor(
-    private readonly userRespositoryMongoDBImpl: UserRepositoryMongoDBImpl,
-    private readonly orderApiImpl: OrderApiImpl,
-    private readonly productApiImpl: ProductApiImpl,
+    private readonly userRespositoryMongoDBImpl: UserRepositoryPort,
+    private readonly orderApiImpl: OrderApiPort,
+    private readonly productApiImpl: ProductApiPort,
   ) {}
 
   async execute(params: UserOrderPort.Params) {
     try {
       const { id } = params
 
-      const user = this.userRespositoryMongoDBImpl.findById(id)
+      const user = await this.userRespositoryMongoDBImpl.findById(id)
 
       if (!user) {
         return {
@@ -37,14 +37,17 @@ export class UserOrderUseCase implements UseCase<UserOrderPort.Params, UserOrder
 
       const userOrders = await this.orderApiImpl.findAllByUserId(id)
 
-      const detailedOrders = userOrders.map(async (order: OrderDomainEntity) => {
-        const product = await this.productApiImpl.findById(order.productId)
-        return {
-          ...order,
-          productName: product ? product.name : 'Unknown',
-          productPrice: product ? product.price : 0,
-        }
-      })
+      const detailedOrders = await Promise.all(
+        userOrders.map(async (order: OrderDomainEntity) => {
+          const product = await this.productApiImpl.findById(order.productId)
+
+          return {
+            ...order,
+            productName: product ? product.name : 'Unknown',
+            productPrice: product ? product.price : 0,
+          }
+        }),
+      )
 
       return {
         code: '0000',

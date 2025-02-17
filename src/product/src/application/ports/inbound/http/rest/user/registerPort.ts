@@ -1,6 +1,6 @@
 // * Request & Response DTOs
-import type { RegisterRequestDTO } from './dtos/registerRequestDTO'
-import type { RegisterResponseDTO } from './dtos/registerResponseDTO'
+import type { RegisterRequestDTO } from './dtos/request/registerRequestDTO'
+import type { RegisterResponseDTO } from './dtos/response/registerResponseDTO'
 
 export interface RegisterPort {
   execute: (data: RegisterPort.Body) => Promise<RegisterPort.Result>

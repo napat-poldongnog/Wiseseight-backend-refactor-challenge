@@ -1,5 +1,5 @@
 // * Response DTOs
-import type { InquiryAllProductResponseDTO } from './dtos/inquiryAllProductResponseDTO'
+import type { InquiryAllProductResponseDTO } from './dtos/response/inquiryAllProductResponseDTO'
 
 export interface InquiryAllProductPort {
   execute: () => Promise<InquiryAllProductPort.Result>

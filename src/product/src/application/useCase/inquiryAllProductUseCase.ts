@@ -1,14 +1,14 @@
-// * Use case config interface
+// * Use case config
 import type { UseCase } from '../configuration/useCase'
 
-// * Inbound port interface
+// * Adapter inbound port
 import type { InquiryAllProductPort } from '../ports/inbound/http/rest/product/inquiryAllProductPort'
 
-// * Outbound repository
-import type { ProductRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/productRepositoryMongoDBImpl'
+// * Adapter outbound repository port
+import type { ProductRepositoryPort } from '../ports/outbound/repositories/productRepositoryPort'
 
 export class InquiryAllProductUseCase implements UseCase<InquiryAllProductPort.Param, InquiryAllProductPort.Result> {
-  constructor(private readonly productRepositoryImpl: ProductRepositoryMongoDBImpl) {}
+  constructor(private readonly productRepositoryImpl: ProductRepositoryPort) {}
 
   async execute(): Promise<InquiryAllProductPort.Result> {
     try {

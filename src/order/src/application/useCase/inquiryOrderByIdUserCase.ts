@@ -1,19 +1,19 @@
 // * Use case config interface
 import type { UseCase } from '../configuration/useCase'
 
-// * Adapter inbound port interface
+// * Adapter inbound port
 import type { InquiryOrderByIdPort } from '../ports/inbound/http/rest/order/inquiryOrderByIdPort'
 
-// * Adapter outbound API
-import type { ProductApiImpl } from '../../adapters/outbound/gatewayAPI/productApi/productApiImpl'
+// * Adapter outbound repository port
+import type { OrderRepositoryPort } from '../ports/outbound/repositories/orderRepositoryPort'
 
-// * Adapter outbound repository
-import type { OrderRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/orderRepositoryMongoDBImpl'
+// * Adapter outbound gateway api port
+import type { ProductApiPort } from '../ports/outbound/gatewayAPI/product/productApiPort'
 
 export class InquiryOrderByIdUserCase implements UseCase<InquiryOrderByIdPort.Params, InquiryOrderByIdPort.Result> {
   constructor(
-    private readonly productApiImpl: ProductApiImpl,
-    private readonly orderRepositoryImpl: OrderRepositoryMongoDBImpl,
+    private readonly productApiImpl: ProductApiPort,
+    private readonly orderRepositoryImpl: OrderRepositoryPort,
   ) {}
 
   async execute(reqParams: InquiryOrderByIdPort.Params): Promise<InquiryOrderByIdPort.Result> {

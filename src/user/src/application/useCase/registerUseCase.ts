@@ -1,17 +1,17 @@
 // * UUID
 import { v4 as uuidv4 } from 'uuid'
 
-// * Use case config interface
+// * Use case config
 import type { UseCase } from '../configuration/useCase'
 
-// * Adapter inbound port interface
+// * Adapter inbound port
 import type { RegisterPort } from '../ports/inbound/http/rest/registerPort'
 
-// * Adapter outbound repository
-import type { UserRepositoryMongoDBImpl } from '../../adapters/outbound/db/mongoDB/userRepositoryMongoDBImpl'
+// * Adapter outbound repository port
+import type { UserRepositoryPort } from '../ports/outbound/repositories/userRepositoryPort'
 
 export class RegisterUseCase implements UseCase<RegisterPort.Body, RegisterPort.Result> {
-  constructor(private readonly userRepositoryMongoDBImpl: UserRepositoryMongoDBImpl) {}
+  constructor(private readonly userRepositoryMongoDBImpl: UserRepositoryPort) {}
 
   async execute(reqBody: RegisterPort.Body) {
     try {
