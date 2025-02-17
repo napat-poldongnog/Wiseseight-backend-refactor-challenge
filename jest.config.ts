@@ -5,10 +5,7 @@ export {}
 module.exports = {
   verbose: false,
   preset: 'ts-jest',
-  collectCoverageFrom: [
-    '<rootDir>/src/application/useCase/**/*.{ts}',
-    '!**/node_modules/**',
-  ],
+  collectCoverageFrom: ['<rootDir>/src/application/useCase/**/*.{ts}', '!**/node_modules/**'],
   coverageThreshold: {
     // This threshold for development only
     global: {
