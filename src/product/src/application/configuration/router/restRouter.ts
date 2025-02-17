@@ -4,7 +4,7 @@ import path from 'path'
 import { pathToFileURL } from 'url'
 
 // * Express instance type
-import type { ExpressInstance } from '../../../app'
+import type { ExpressInstance } from '../../../../app'
 
 // * App interface
 import type { Router } from 'express'
@@ -25,7 +25,7 @@ export declare namespace RestRouter {
 
 class AppRestRouter {
   private readonly expressInstance: ExpressInstance
-  private readonly restRouteFilePath: string = path.resolve('./adapters/inbound/http/restController')
+  private readonly restRouteFilePath: string = path.resolve('./src/adapters/inbound/http/restController')
 
   constructor(expressInstance: ExpressInstance) {
     this.expressInstance = expressInstance

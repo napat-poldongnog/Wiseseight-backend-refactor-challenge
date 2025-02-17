@@ -2,8 +2,8 @@
 import express from 'express'
 
 // * Application config
-import App from './application/configuration/app'
-import appEnv from './application/configuration/properties/appEnv'
+import App from './src/application/configuration/app'
+import appEnv from './src/application/configuration/properties/appEnv'
 
 const envVars = appEnv()
 

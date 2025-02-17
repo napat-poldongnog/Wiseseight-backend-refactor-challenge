@@ -22,6 +22,14 @@ export class InquiryOrderByIdUserCase implements UseCase<InquiryOrderByIdPort.Pa
 
       const order = await this.orderRepositoryImpl.findById(id)
 
+      if (!order) {
+        return {
+          data: null,
+          code: '0001', // Just mock
+          message: 'Order not found',
+        }
+      }
+
       let product = null
       if (order?.productId) {
         product = await this.productApiImpl.findById(order.productId)

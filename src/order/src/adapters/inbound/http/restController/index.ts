@@ -51,12 +51,8 @@ export class OrderRestController {
           res.status(201).json({ code, message, data })
         } else if (code === '0001') {
           return res.status(400).json({ code, message })
-        } else if (code === '0002') {
-          return res.status(404).json({ code, message })
-        } else if (code === '0003') {
-          return res.status(400).json({ code: '', message })
         } else {
-          res.status(201).json({ code: '', message, data })
+          res.status(500).json({ code, message })
         }
       },
     )
@@ -77,9 +73,9 @@ export class OrderRestController {
         } else if (code === '0002') {
           return res.status(404).json({ code, message })
         } else if (code === '0003') {
-          return res.status(400).json({ code: '', message })
+          return res.status(400).json({ code, message })
         } else {
-          res.status(201).json({ code: '', message, data })
+          res.status(500).json({ code, message })
         }
       },
     )
